@@ -1,4 +1,4 @@
-import _ = require('lodash/fp');
+import * as R from 'ramda';
 
 function stringReducer<A>(f: (str: string, acc: A) => [number, A]) {
   return function step(str: string, acc: A): A {
@@ -15,50 +15,60 @@ function stringReducer<A>(f: (str: string, acc: A) => [number, A]) {
   }
 }
 
-function extractPrefix(regexp: RegExp, str: string): string | undefined {
-  return _.get('[0]', str.match(new RegExp(`^${regexp.source}`)))
+function extractPrefix(regexp: RegExp, str: string): string[] | undefined {
+  const m = str.match(new RegExp(`^${regexp.source}`))
+  return m === null ? undefined : [...m]
 }
 
-type Token = [string, any]
+type Token = ['SPACE', string] | ['NEWLINE', string] | ['ID', string] | ['OP', string] | ['LITSTR', string]
 
-interface Rule {
-  regExp: RegExp
-  token: (str: string) => Token
-}
+type Rule = [RegExp, (captures: string[]) => Token]
 
-const rules = _.map(_.zipObject(['regExp', 'token']))([
+const rules: Rule[] = [
   [
-    /[\t ]+/
+    /[\t ]+/,
+    c => ['SPACE', c[0]]
   ],
   [
-    /\n/,
-    (s: string) => ['newline']
+    /\r?\n/,
+    c => ['NEWLINE', c[0]]
   ],
   [
     /\w+/,
-    (s: string) => ['identifier', s]
+    c => ['ID', c[0]]
   ],
   [
     /=/,
-    () => ['assignment']
+    c => ['OP', c[0]]
   ],
   [
-    /'[^']+'/,
-    (s: string) => ['string literal', s]
+    /'([^']+)'/,
+    c => ['LITSTR', c[1]]
   ]
-])
+]
 
-function extractToken(rules: Rule[], str: string): {matchLength: number, token: Token | undefined} {
-  const tokenResult = _.flow(
-    _.map((rule: Rule) => {
-      const s = extractPrefix(rule.regExp, str)
-      return !s ? undefined : {
-        matchLength: s.length,
-        token: rule.token ? rule.token(s) : undefined
-      }
-    }),
-    _.reject(_.isUndefined),
-    _.take(1)
+interface RuleMatchResult {
+  matchLength: number
+  token?: Token
+}
+
+function applyRule(str: string) {
+  return (rule: Rule): RuleMatchResult | undefined => {
+    const [regExp, createToken] = rule
+    const captures = extractPrefix(regExp, str)
+    return !captures ? undefined : {
+      matchLength: captures[0].length,
+      token: createToken ? createToken(captures) : undefined
+    }
+  }
+}
+
+function extractToken(rules: Rule[], str: string): RuleMatchResult {
+  const applyRuleToStr = applyRule(str)
+  const tokenResult: RuleMatchResult | undefined = R.pipe(
+    R.map(applyRuleToStr),
+    R.reject(R.isNil),
+    R.take<RuleMatchResult>(1)
   )(rules)[0]
 
   return tokenResult || {
@@ -74,10 +84,10 @@ interface LexerState {
   error: boolean
 }
 
-const lexer = stringReducer((remainingStr: string, acc: LexerState) => {
+const stringReducerLexer = stringReducer((remainingStr: string, acc: LexerState) => {
   const {matchLength, token} = extractToken(rules, remainingStr)
 
-  const newline = token && token[0] == 'newline';
+  const newline = token && token[0] == 'NEWLINE';
 
   const updatedAcc = {
     ...acc,
@@ -85,7 +95,7 @@ const lexer = stringReducer((remainingStr: string, acc: LexerState) => {
       token ? {
         tokens: [...acc.tokens, token],
         row: acc.row + (newline ? 1 : 0),
-        col: newline ? 1 : acc.col + 1
+        col: newline ? 1 : acc.col + matchLength
       } : {}
     :
       {error: true}
@@ -95,13 +105,7 @@ const lexer = stringReducer((remainingStr: string, acc: LexerState) => {
   return [matchLength, updatedAcc]
 })
 
-
-const src = `
-p = 'asd'
-q = 'lol'
-
-qp = '$asd $lol'
-
-`
-
-console.log(lexer(src, {tokens: [], col: 1, row: 1, error: false}));
+export default function lexer(source: string) {
+  const startState = {tokens: [], col: 1, row: 1, error: false}
+  return stringReducerLexer(source, startState)
+}

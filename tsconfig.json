@@ -1,31 +1,23 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "allowSyntheticDefaultImports": false,
-        "strictNullChecks": true,
-        "target": "es6",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "isolatedModules": false,
-        "jsx": "react",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "declaration": false,
-        "noImplicitAny": true,
-        "noImplicitUseStrict": false,
-        "removeComments": true,
-        "noLib": false,
-        "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
-    },
-    "exclude": [
-        "node_modules",
-        "typings/browser",
-        "typings/browser.d.ts"
-    ],
-    "compileOnSave": true,
-    "buildOnSave": false,
-    "atom": {
-        "rewriteTsconfig": false
-    }
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2,
+    "newLineCharacter": "\n",
+    "convertTabsToSpaces": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

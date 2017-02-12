@@ -2,9 +2,13 @@
 # yarn lockfile v1
 
 
-lodash@^4.17.2:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+"@types/ramda@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.0.3.tgz#683a3437d4446a4d21af473a9286e6950fa777c1"
+
+ramda@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.23.0.tgz#ccd13fff73497a93974e3e86327bfd87bd6e8e2b"
 
 typescript@next:
   version "2.2.0-dev.20170211"

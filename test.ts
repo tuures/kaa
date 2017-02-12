@@ -4,7 +4,9 @@ const src = `
 p = 'asd'
 q = 'lol'
 
-qp = '$asd $lol'
+integer = 123
+
+qp = '$asd $lol $integer'
 
 `
 

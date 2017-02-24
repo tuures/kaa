@@ -11,5 +11,5 @@ ramda@^0.23.0:
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.23.0.tgz#ccd13fff73497a93974e3e86327bfd87bd6e8e2b"
 
 typescript@next:
-  version "2.2.0-dev.20170211"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170211.tgz#f25f254d22379d7174692f4337f667998742b4f0"
+  version "2.3.0-dev.20170224"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.0-dev.20170224.tgz#062a2b874bde1dfba6147396188df59994d89332"

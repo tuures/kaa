@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./node_modules/.bin/tsc --outDir dist"
   },
   "author": "",
   "license": null,
@@ -13,8 +13,5 @@
     "@types/ramda": "^0.0.3",
     "ramda": "^0.23.0",
     "typescript": "next"
-  },
-  "scripts": {
-    "build": "./node_modules/.bin/tsc --outDir dist"
   }
 }

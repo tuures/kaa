@@ -1,14 +1,13 @@
-export default function stringReducer<A>(f: (str: string, acc: A) => [number, A]) {
-  return function step(str: string, acc: A): A {
-    if (str.length <= 0) {
-      return acc
-    } else {
-      const [count, updatedAcc] = f(str, acc)
-      if (count <= 0) {
-        return updatedAcc
-      } else {
-        return step(str.substr(count), updatedAcc)
-      }
-    }
-  }
+import seqReducer from './seqReducer'
+
+function length(str: string) {
+  return str.length;
 }
+
+function drop(n: number, str: string) {
+  return str.substr(n)
+}
+
+const stringReducer = seqReducer<string>(length, drop)
+
+export default stringReducer

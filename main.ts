@@ -1,5 +1,3 @@
-import * as R from 'ramda'
-
 import * as RegExpRuleLexer from './lib/RegExpRuleLexer'
 
 export type Token = ['SPACE', string]
@@ -39,13 +37,13 @@ const lexerRules: RegExpRuleLexer.Rule<Token>[] = [
 const lexer = RegExpRuleLexer.create<Token>(lexerRules, t => t[0] === 'NEWLINE')
 
 function parser(tokens: Token[]) {
-  const tokensNoSpace = R.filter<Token>(t => t[0] !== 'SPACE')(tokens)
+  return tokens
 }
 
 function compiler(source: string) {
   const {tokens, error, row, col} = lexer(source)
   if (error) {
-    console.log(`Unexpected token at ${row}:${col}`)
+    console.log(`Unexpected character at ${row}:${col}`)
   } else {
     console.log(parser(tokens))
   }
